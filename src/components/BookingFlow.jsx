@@ -46,15 +46,6 @@ export default function BookingFlow({ config }) {
   }
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      backgroundColor: "#f4f4f5",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "24px 16px",
-      fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif",
-    }}>
       <div style={{
         width: "100%",
         maxWidth: 400,
@@ -149,6 +140,5 @@ export default function BookingFlow({ config }) {
           oye.nino. · hono + cloudflare d1
         </div>
       </div>
-    </div>
   );
 }

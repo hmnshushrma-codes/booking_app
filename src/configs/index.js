@@ -54,3 +54,22 @@ export const homestay = {
   ],
   slots: ["Jun 27–28", "Jun 28–30", "Jul 1–3", "Jul 4–6", "Jul 10–12", "Jul 15–18"],
 };
+
+// ─────────────────────────────────────────────────────────────
+// HOTEL CONFIG
+// ─────────────────────────────────────────────────────────────
+export const hotel = {
+  type: "hotel",
+  brand: "The Grand Palace",
+  tagline: "Reserve your room",
+  providerLabel: "Jaipur, Rajasthan",
+  accent: "#e11d48",
+  accentSoft: "#fff1f2",
+  slotType: "date",
+  services: [
+    { id: "ht1", name: "Standard Room",   meta: "Max 2 guests", price: "₹3,200/night", maxGuests: 2 },
+    { id: "ht2", name: "Deluxe Suite",    meta: "Max 3 guests", price: "₹5,500/night", maxGuests: 3 },
+    { id: "ht3", name: "Royal Suite",     meta: "Max 4 guests", price: "₹9,000/night", maxGuests: 4 },
+  ],
+  slots: ["Jul 1–3", "Jul 5–7", "Jul 10–12", "Jul 15–18", "Jul 20–22", "Jul 25–28"],
+};
