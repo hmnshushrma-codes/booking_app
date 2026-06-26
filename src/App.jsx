@@ -1,62 +1,76 @@
 import { useState } from "react";
-import BookingFlow from "./components/BookingFlow.jsx";
-import ConfigSwitcher from "./components/ConfigSwitcher.jsx";
-import { clinic, barber, homestay, hotel } from "./configs/index.js";
-
-const CONFIGS = { clinic, barber, homestay, hotel };
-
-function getInitialType() {
-  const params = new URLSearchParams(window.location.search);
-  const type = params.get("type");
-  return CONFIGS[type] ? type : "clinic";
-}
+import LandingPage from "./pages/LandingPage.jsx";
+import BookingPage from "./pages/BookingPage.jsx";
+import ConfirmationPage from "./pages/ConfirmationPage.jsx";
+import SlotsUnavailable from "./pages/SlotsUnavailable.jsx";
 
 export default function App() {
-  const [activeType, setActiveType] = useState(getInitialType);
-  const [flowKey, setFlowKey] = useState(0);
+  const [page, setPage] = useState("landing");
+  const [preSelectedService, setPreSelectedService] = useState(null);
+  const [bookingResult, setBookingResult] = useState(null);
+  const [unavailableInfo, setUnavailableInfo] = useState(null);
 
-  function handleSwitch(type) {
-    setActiveType(type);
-    setFlowKey((k) => k + 1); // remount BookingFlow to reset state
+  function goToBooking(service) {
+    setPreSelectedService(service || null);
+    setPage("booking");
+    window.scrollTo(0, 0);
   }
 
-  return (
-    <div style={{
-      minHeight: "100vh",
-      backgroundColor: "#f4f4f5",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "24px 16px",
-      fontFamily: "'Inter', ui-sans-serif, system-ui, sans-serif",
-    }}>
-      {/* Config Switcher — above the booking card */}
-      <div style={{
-        width: "100%",
-        maxWidth: 400,
-        marginBottom: 16,
-        padding: "14px 8px",
-        backgroundColor: "#ffffff",
-        borderRadius: 20,
-        boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
-      }}>
-        <p style={{
-          textAlign: "center",
-          margin: "0 0 10px",
-          fontSize: 12,
-          fontWeight: 600,
-          color: "#a1a1aa",
-          letterSpacing: "0.5px",
-          textTransform: "uppercase",
-        }}>
-          Switch Booking Flow
-        </p>
-        <ConfigSwitcher active={activeType} onChange={handleSwitch} />
-      </div>
+  function goToConfirmation(data) {
+    setBookingResult(data);
+    setPage("confirmation");
+    window.scrollTo(0, 0);
+  }
 
-      {/* Booking Card */}
-      <BookingFlow key={flowKey} config={CONFIGS[activeType]} />
-    </div>
-  );
+  function goToSlotsUnavailable(info) {
+    setUnavailableInfo(info);
+    setPage("slotsUnavailable");
+    window.scrollTo(0, 0);
+  }
+
+  function goToLanding() {
+    setPage("landing");
+    window.scrollTo(0, 0);
+  }
+
+  if (page === "landing") {
+    return (
+      <LandingPage
+        onBookNow={() => goToBooking()}
+        onServiceSelect={(svc) => goToBooking(svc)}
+      />
+    );
+  }
+
+  if (page === "booking") {
+    return (
+      <BookingPage
+        preSelectedService={preSelectedService}
+        onBack={goToLanding}
+        onConfirm={goToConfirmation}
+        onSlotsUnavailable={goToSlotsUnavailable}
+      />
+    );
+  }
+
+  if (page === "confirmation") {
+    return (
+      <ConfirmationPage
+        booking={bookingResult}
+        onBookAnother={() => goToBooking()}
+      />
+    );
+  }
+
+  if (page === "slotsUnavailable") {
+    return (
+      <SlotsUnavailable
+        info={unavailableInfo}
+        onTryAnother={() => goToBooking(unavailableInfo.service)}
+        onChooseDifferent={() => goToBooking()}
+      />
+    );
+  }
+
+  return null;
 }
