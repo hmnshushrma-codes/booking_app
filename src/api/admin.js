@@ -1,10 +1,17 @@
 const API_BASE = import.meta.env.VITE_API_BASE || "https://api.book.oyenino.com";
-const ADMIN_KEY = "06ac9142318997ad15a36ca97e8178a799279ac385a79ccfebf7460141faca90a4f428ea9a7c2c2dc9c236dad3f5a79db2fb6050a3936329c3f2ce0b3c887d23f16384bf854c48651e878ac7b0d82fdf6c765861ac02c62bb3b7e4549d2d5883659e563aba868fdccbf5d68438f07396033b5f2a9d0548db6a88cde67ee65101";
+
+function getAdminKey() {
+  return localStorage.getItem("adminKey") || "";
+}
+
+export function setAdminKey(key) {
+  localStorage.setItem("adminKey", key);
+}
 
 function adminHeaders() {
   return {
     "Content-Type": "application/json",
-    "X-Admin-Key": ADMIN_KEY,
+    "X-Admin-Key": getAdminKey(),
   };
 }
 
@@ -106,6 +113,7 @@ export async function cancelBooking(id) {
 export function logout() {
   localStorage.removeItem("adminToken");
   localStorage.removeItem("adminUser");
+  localStorage.removeItem("adminKey");
 }
 
 export function getAdminUser() {

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../../config.js";
-import { login, isLoggedIn } from "../../api/admin.js";
+import { login, setAdminKey, isLoggedIn } from "../../api/admin.js";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  const [secretKey, setSecretKey] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,19 +20,29 @@ export default function AdminLogin() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
-    if (!email || !password) {
-      setError("Please fill in all fields");
+    if (!secretKey || !email || !password) {
+      setError("All fields are required");
       return;
     }
+    // Store the key so all subsequent API calls use it
+    setAdminKey(secretKey);
     setLoading(true);
     const result = await login(email, password);
     setLoading(false);
     if (result.success) {
       navigate("/admin/dashboard");
     } else {
-      setError(result.error || "Invalid email or password");
+      setError(result.error || "Invalid credentials");
     }
   }
+
+  const inputStyle = {
+    width: "100%", padding: "14px 16px",
+    backgroundColor: "rgba(255,255,255,0.06)",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: 12, color: "#fff", fontSize: 14,
+    fontFamily: "inherit", outline: "none",
+  };
 
   return (
     <div style={{
@@ -71,18 +82,22 @@ export default function AdminLogin() {
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)", marginBottom: 8 }}>
+              Secret Key
+            </label>
+            <input
+              type="password" value={secretKey} onChange={(e) => setSecretKey(e.target.value)}
+              placeholder="Enter admin secret key" autoComplete="off"
+              style={inputStyle}
+            />
+          </div>
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.7)", marginBottom: 8 }}>
               Email
             </label>
             <input
               type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@example.com" autoComplete="email"
-              style={{
-                width: "100%", padding: "14px 16px",
-                backgroundColor: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 12, color: "#fff", fontSize: 14,
-                fontFamily: "inherit", outline: "none",
-              }}
+              style={inputStyle}
             />
           </div>
           <div style={{ marginBottom: 24 }}>
@@ -92,13 +107,7 @@ export default function AdminLogin() {
             <input
               type="password" value={password} onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password" autoComplete="current-password"
-              style={{
-                width: "100%", padding: "14px 16px",
-                backgroundColor: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 12, color: "#fff", fontSize: 14,
-                fontFamily: "inherit", outline: "none",
-              }}
+              style={inputStyle}
             />
           </div>
 
