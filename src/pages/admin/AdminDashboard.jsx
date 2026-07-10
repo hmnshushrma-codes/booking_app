@@ -6,7 +6,7 @@ import {
   getWeekBookings,
   getBookingsByDate,
   cancelBooking,
-  logout,
+  apiLogout,
   getAdminUser,
 } from "../../api/admin.js";
 
@@ -60,8 +60,8 @@ export default function AdminDashboard() {
     }
   }
 
-  function handleLogout() {
-    logout();
+  async function handleLogout() {
+    await apiLogout();
     navigate("/admin");
   }
 

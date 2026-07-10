@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../../config.js";
-import { login, setAdminKey, isLoggedIn } from "../../api/admin.js";
+import { login, isLoggedIn } from "../../api/admin.js";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -24,10 +24,8 @@ export default function AdminLogin() {
       setError("All fields are required");
       return;
     }
-    // Store the key so all subsequent API calls use it
-    setAdminKey(secretKey);
     setLoading(true);
-    const result = await login(email, password);
+    const result = await login(secretKey, email, password);
     setLoading(false);
     if (result.success) {
       navigate("/admin/dashboard");
