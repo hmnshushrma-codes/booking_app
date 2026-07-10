@@ -25,8 +25,8 @@ const VALIDATORS = {
   },
 };
 
-export default function BookingForm({ onSubmit, loading }) {
-  const [form, setForm] = useState({ name: "", phone: "", email: "", notes: "" });
+export default function BookingForm({ onSubmit, loading, initialData }) {
+  const [form, setForm] = useState(initialData || { name: "", phone: "", email: "", notes: "" });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
 

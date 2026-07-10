@@ -4,13 +4,8 @@ export default function Navbar({ onBookNow }) {
   return (
     <nav style={{
       position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      zIndex: 100,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
+      top: 0, left: 0, right: 0, zIndex: 100,
+      display: "flex", alignItems: "center", justifyContent: "space-between",
       padding: "16px 24px",
       backgroundColor: "rgba(10,10,10,0.85)",
       backdropFilter: "blur(12px)",
@@ -29,16 +24,10 @@ export default function Navbar({ onBookNow }) {
       <button
         onClick={onBookNow}
         style={{
-          padding: "10px 22px",
-          backgroundColor: config.accent,
-          color: "#0a0a0a",
-          border: "none",
-          borderRadius: 50,
-          fontSize: 13,
-          fontWeight: 700,
-          cursor: "pointer",
-          fontFamily: "inherit",
-          minHeight: 44,
+          padding: "10px 22px", backgroundColor: config.accent,
+          color: "#0a0a0a", border: "none", borderRadius: 50,
+          fontSize: 13, fontWeight: 700, cursor: "pointer",
+          fontFamily: "inherit", minHeight: 44,
         }}
       >
         Book Now

@@ -1,76 +1,38 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage.jsx";
 import BookingPage from "./pages/BookingPage.jsx";
 import ConfirmationPage from "./pages/ConfirmationPage.jsx";
 import SlotsUnavailable from "./pages/SlotsUnavailable.jsx";
+import AdminLogin from "./pages/admin/AdminLogin.jsx";
+import AdminForgotPassword from "./pages/admin/AdminForgotPassword.jsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import AdminGuard from "./components/AdminGuard.jsx";
 
 export default function App() {
-  const [page, setPage] = useState("landing");
-  const [preSelectedService, setPreSelectedService] = useState(null);
-  const [bookingResult, setBookingResult] = useState(null);
-  const [unavailableInfo, setUnavailableInfo] = useState(null);
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/book" element={<BookingPage />} />
+        <Route path="/confirmation/:bookingId" element={<ConfirmationPage />} />
+        <Route path="/slots-unavailable" element={<SlotsUnavailable />} />
 
-  function goToBooking(service) {
-    setPreSelectedService(service || null);
-    setPage("booking");
-    window.scrollTo(0, 0);
-  }
+        {/* Admin */}
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/forgot" element={<AdminForgotPassword />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <AdminGuard>
+              <AdminDashboard />
+            </AdminGuard>
+          }
+        />
 
-  function goToConfirmation(data) {
-    setBookingResult(data);
-    setPage("confirmation");
-    window.scrollTo(0, 0);
-  }
-
-  function goToSlotsUnavailable(info) {
-    setUnavailableInfo(info);
-    setPage("slotsUnavailable");
-    window.scrollTo(0, 0);
-  }
-
-  function goToLanding() {
-    setPage("landing");
-    window.scrollTo(0, 0);
-  }
-
-  if (page === "landing") {
-    return (
-      <LandingPage
-        onBookNow={() => goToBooking()}
-        onServiceSelect={(svc) => goToBooking(svc)}
-      />
-    );
-  }
-
-  if (page === "booking") {
-    return (
-      <BookingPage
-        preSelectedService={preSelectedService}
-        onBack={goToLanding}
-        onConfirm={goToConfirmation}
-        onSlotsUnavailable={goToSlotsUnavailable}
-      />
-    );
-  }
-
-  if (page === "confirmation") {
-    return (
-      <ConfirmationPage
-        booking={bookingResult}
-        onBookAnother={() => goToBooking()}
-      />
-    );
-  }
-
-  if (page === "slotsUnavailable") {
-    return (
-      <SlotsUnavailable
-        info={unavailableInfo}
-        onTryAnother={() => goToBooking(unavailableInfo.service)}
-        onChooseDifferent={() => goToBooking()}
-      />
-    );
-  }
-
-  return null;
+        {/* Catch-all */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import config from "../config.js";
 import Navbar from "../components/Navbar.jsx";
 import ServiceCard from "../components/ServiceCard.jsx";
@@ -13,9 +14,9 @@ const GALLERY = [
 ];
 
 const USPS = [
-  { icon: "⚡", title: "Instant Booking", desc: "Pick a slot, confirm — done in 30 seconds." },
-  { icon: "✂️", title: "Expert Stylists", desc: "Trained professionals who know their craft." },
-  { icon: "💰", title: "Transparent Pricing", desc: "No hidden charges. What you see is what you pay." },
+  { icon: "\u26A1", title: "Instant Booking", desc: "Pick a slot, confirm \u2014 done in 30 seconds." },
+  { icon: "\u2702\uFE0F", title: "Expert Stylists", desc: "Trained professionals who know their craft." },
+  { icon: "\uD83D\uDCB0", title: "Transparent Pricing", desc: "No hidden charges. What you see is what you pay." },
 ];
 
 function useFadeIn(threshold = 0.15) {
@@ -67,12 +68,16 @@ function SectionLabel({ number, label }) {
   );
 }
 
-export default function LandingPage({ onBookNow, onServiceSelect }) {
+export default function LandingPage() {
+  const navigate = useNavigate();
+  const goBook = () => navigate("/book");
+  const goBookService = (svc) => navigate(`/book?service=${svc.id}`);
+
   return (
     <div style={{ backgroundColor: "#0a0a0a", minHeight: "100vh" }}>
-      <Navbar onBookNow={onBookNow} />
+      <Navbar onBookNow={goBook} />
 
-      {/* ── Hero ── */}
+      {/* Hero */}
       <section style={{
         position: "relative",
         height: "100vh",
@@ -98,43 +103,32 @@ export default function LandingPage({ onBookNow, onServiceSelect }) {
           maxWidth: 480,
         }}>
           <h1 style={{
-            fontSize: 42,
-            fontWeight: 800,
-            lineHeight: 1.1,
-            marginBottom: 16,
-            letterSpacing: "-1px",
+            fontSize: 42, fontWeight: 800, lineHeight: 1.1,
+            marginBottom: 16, letterSpacing: "-1px",
           }}>
             {config.brand}
           </h1>
           <p style={{
-            fontSize: 16,
-            color: "rgba(255,255,255,0.6)",
-            marginBottom: 36,
-            lineHeight: 1.5,
+            fontSize: 16, color: "rgba(255,255,255,0.6)",
+            marginBottom: 36, lineHeight: 1.5,
           }}>
             {config.tagline}
           </p>
           <button
-            onClick={onBookNow}
+            onClick={goBook}
             style={{
-              padding: "16px 36px",
-              backgroundColor: config.accent,
-              color: "#0a0a0a",
-              border: "none",
-              borderRadius: 50,
-              fontSize: 15,
-              fontWeight: 700,
-              cursor: "pointer",
-              fontFamily: "inherit",
-              minHeight: 52,
+              padding: "16px 36px", backgroundColor: config.accent,
+              color: "#0a0a0a", border: "none", borderRadius: 50,
+              fontSize: 15, fontWeight: 700, cursor: "pointer",
+              fontFamily: "inherit", minHeight: 52,
             }}
           >
-            Book your slot →
+            Book your slot &rarr;
           </button>
         </div>
       </section>
 
-      {/* ── Services ── */}
+      {/* Services */}
       <section style={{ padding: "80px 24px", maxWidth: 480, margin: "0 auto" }}>
         <FadeSection>
           <SectionLabel number="01" label="services" />
@@ -150,36 +144,28 @@ export default function LandingPage({ onBookNow, onServiceSelect }) {
                 key={svc.id}
                 service={svc}
                 selected={false}
-                onClick={() => onServiceSelect(svc)}
+                onClick={() => goBookService(svc)}
               />
             ))}
           </div>
         </FadeSection>
       </section>
 
-      {/* ── Gallery ── */}
+      {/* Gallery */}
       <section style={{ padding: "40px 24px 80px", maxWidth: 480, margin: "0 auto" }}>
         <FadeSection>
           <SectionLabel number="02" label="our work" />
           <h2 style={{ fontSize: 26, fontWeight: 800, marginBottom: 24, letterSpacing: "-0.5px" }}>
             Gallery
           </h2>
-          <div style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 12,
-          }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             {GALLERY.map((src, i) => (
               <div key={i} style={{
-                borderRadius: 16,
-                overflow: "hidden",
-                aspectRatio: "1",
-                backgroundColor: "rgba(255,255,255,0.04)",
+                borderRadius: 16, overflow: "hidden",
+                aspectRatio: "1", backgroundColor: "rgba(255,255,255,0.04)",
               }}>
                 <img
-                  src={src}
-                  alt={`Salon work ${i + 1}`}
-                  loading="lazy"
+                  src={src} alt={`Salon work ${i + 1}`} loading="lazy"
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                 />
               </div>
@@ -188,7 +174,7 @@ export default function LandingPage({ onBookNow, onServiceSelect }) {
         </FadeSection>
       </section>
 
-      {/* ── Why Us ── */}
+      {/* Why Us */}
       <section style={{ padding: "40px 24px 80px", maxWidth: 480, margin: "0 auto" }}>
         <FadeSection>
           <SectionLabel number="03" label="why us" />
@@ -198,8 +184,7 @@ export default function LandingPage({ onBookNow, onServiceSelect }) {
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {USPS.map((usp, i) => (
               <div key={i} style={{
-                padding: 20,
-                borderRadius: 16,
+                padding: 20, borderRadius: 16,
                 backgroundColor: "rgba(255,255,255,0.04)",
                 border: "1px solid rgba(255,255,255,0.06)",
               }}>
@@ -214,40 +199,30 @@ export default function LandingPage({ onBookNow, onServiceSelect }) {
         </FadeSection>
       </section>
 
-      {/* ── Bottom CTA ── */}
+      {/* Bottom CTA */}
       <section style={{ padding: "40px 24px 80px", maxWidth: 480, margin: "0 auto" }}>
         <FadeSection>
           <div style={{
-            textAlign: "center",
-            padding: "48px 24px",
-            borderRadius: 24,
+            textAlign: "center", padding: "48px 24px", borderRadius: 24,
             backgroundColor: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(255,255,255,0.06)",
           }}>
             <h2 style={{ fontSize: 24, fontWeight: 800, marginBottom: 12 }}>
               Ready for your new look?
             </h2>
-            <p style={{
-              fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28,
-            }}>
+            <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", marginBottom: 28 }}>
               Book in seconds. No calls needed.
             </p>
             <button
-              onClick={onBookNow}
+              onClick={goBook}
               style={{
-                padding: "16px 36px",
-                backgroundColor: config.accent,
-                color: "#0a0a0a",
-                border: "none",
-                borderRadius: 50,
-                fontSize: 15,
-                fontWeight: 700,
-                cursor: "pointer",
-                fontFamily: "inherit",
-                minHeight: 52,
+                padding: "16px 36px", backgroundColor: config.accent,
+                color: "#0a0a0a", border: "none", borderRadius: 50,
+                fontSize: 15, fontWeight: 700, cursor: "pointer",
+                fontFamily: "inherit", minHeight: 52,
               }}
             >
-              Book your slot →
+              Book your slot &rarr;
             </button>
           </div>
         </FadeSection>
