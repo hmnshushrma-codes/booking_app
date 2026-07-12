@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import config from "../../config.js";
 import { login, isLoggedIn } from "../../api/admin.js";
 
@@ -13,8 +13,7 @@ export default function AdminLogin() {
 
   // If already logged in, redirect
   if (isLoggedIn()) {
-    navigate("/admin/dashboard", { replace: true });
-    return null;
+    return <Navigate to="/admin/dashboard" replace />;
   }
 
   async function handleSubmit(e) {
